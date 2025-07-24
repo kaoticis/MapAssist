@@ -1,0 +1,32 @@
+name: Build MapAssist on Windows
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure with CMake
+        run: cmake -S . -B build -A x64
+
+      - name: Build with CMake
+        run: cmake --build build --config Release
+
+      - name: List all files built
+        run: dir build\Release
+
+      - name: Upload all build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: MapAssist-FullBuild
+          path: build\Release\
+
